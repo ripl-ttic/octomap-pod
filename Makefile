@@ -1,4 +1,5 @@
-# Default makefile distributed with pods version: 11.02.09
+REPO := https://octomap.svn.sourceforge.net/svnroot/octomap/trunk
+CHECKOUT_DIR := octomap
 
 default_target: all
 
@@ -11,7 +12,7 @@ $(VERBOSE).SILENT:
 #   If not, search up to four parent directories for a 'build' directory.
 #   Otherwise, use ./build.
 ifeq "$(BUILD_PREFIX)" ""
-BUILD_PREFIX:=$(shell for pfx in .. ../.. ../../.. ../../../..; do d=`pwd`/$$pfx/build;\
+BUILD_PREFIX:=$(shell for pfx in ./ .. ../.. ../../.. ../../../..; do d=`pwd`/$$pfx/build;\
                if [ -d $$d ]; then echo $$d; exit 0; fi; done; echo `pwd`/build)
 endif
 # create the build directory if needed, and normalize its path name
@@ -30,7 +31,7 @@ pod-build/Makefile:
 	$(MAKE) configure
 
 .PHONY: configure
-configure:
+configure: $(CHECKOUT_DIR)/CMakeLists.txt
 	@echo "\nBUILD_PREFIX: $(BUILD_PREFIX)\n\n"
 
 	# create the temporary build directory if needed
@@ -38,8 +39,16 @@ configure:
 
 	# run CMake to generate and configure the build scripts
 	@cd pod-build && cmake -DCMAKE_INSTALL_PREFIX=$(BUILD_PREFIX) \
-	                       -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) ../octomap
+		   -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) ../$(CHECKOUT_DIR)
+		   
+$(CHECKOUT_DIR)/CMakeLists.txt:
+	svn checkout $(REPO) $(CHECKOUT_DIR)
+		   
 
 clean:
 	-if [ -e pod-build/install_manifest.txt ]; then rm -f `cat pod-build/install_manifest.txt`; fi
 	-if [ -d pod-build ]; then $(MAKE) -C pod-build clean; rm -rf pod-build; fi
+
+# other (custom) targets are passed through to the cmake-generated Makefile 
+%::
+	$(MAKE) -C pod-build $@
