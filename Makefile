@@ -39,7 +39,7 @@ configure: $(CHECKOUT_DIR)/CMakeLists.txt
 
 	# run CMake to generate and configure the build scripts
 	@cd pod-build && cmake -DCMAKE_INSTALL_PREFIX=$(BUILD_PREFIX) \
-		   -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) ../$(CHECKOUT_DIR)
+		   -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) ../$(CHECKOUT_DIR)/octomap
 		   
 $(CHECKOUT_DIR)/CMakeLists.txt:
 	svn checkout $(REPO) $(CHECKOUT_DIR)
