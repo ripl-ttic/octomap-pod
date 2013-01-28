@@ -37,6 +37,12 @@ configure: $(CHECKOUT_DIR)/CMakeLists.txt
 	# create the temporary build directory if needed
 	@mkdir -p pod-build
 
+	# Patch the INSTALL_NAME_DIR for OSX, which ensures that the install name
+	# for shared libraries includes the full path
+ifeq ($(shell uname),Darwin)
+	- patch -p0 -N -s -i octomap-v1.4.2.install_name_dir.patch
+endif
+
 	# run CMake to generate and configure the build scripts
 	@cd pod-build && cmake -DCMAKE_INSTALL_PREFIX=$(BUILD_PREFIX) \
 		   -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) ../$(CHECKOUT_DIR)/octomap
