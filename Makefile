@@ -43,6 +43,10 @@ ifeq ($(shell uname),Darwin)
 	- patch -p0 -N -s -i octomap-v1.4.2.install_name_dir.patch
 endif
 
+	# Patch to fix genCoords issue present in v1.4.2
+	echo "Applying genCoords patch for version v1.4.2"
+	- patch -p0 -N -s -i octomap-v1.4.2.genCoords.patch
+
 	# run CMake to generate and configure the build scripts
 	@cd pod-build && cmake -DCMAKE_INSTALL_PREFIX=$(BUILD_PREFIX) \
 		   -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) ../$(CHECKOUT_DIR)/octomap

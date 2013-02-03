@@ -1,0 +1,28 @@
+Index: octomap-v1.4.2/octomap/include/octomap/OccupancyOcTreeBase.hxx
+===================================================================
+--- octomap-v1.4.2/octomap/include/octomap/OccupancyOcTreeBase.hxx	(revision 447)
++++ octomap-v1.4.2/octomap/include/octomap/OccupancyOcTreeBase.hxx	(working copy)
+@@ -363,12 +363,12 @@
+       if (isNodeOccupied(startingNode)){
+         // Occupied node found at origin 
+         // (need to convert from key, since origin does not need to be a voxel center)
+-        genCoords(current_key, this->tree_depth, end);
++        this->genCoords(current_key, this->tree_depth, end);
+         return true;
+       }
+     } else if(!ignoreUnknown){
+       OCTOMAP_ERROR_STR("Origin node at " << origin << " for raycasting not found, does the node exist?");
+-      genCoords(current_key, this->tree_depth, end);
++      this->genCoords(current_key, this->tree_depth, end);
+       return false;
+     }
+ 
+@@ -435,7 +435,7 @@
+       {
+     	  OCTOMAP_WARNING("Coordinate hit bounds in dim %d, aborting raycast\n", dim);
+     	  // return border point nevertheless:
+-    	  genCoords(current_key, this->tree_depth, end);
++    	  this->genCoords(current_key, this->tree_depth, end);
+     	  return false;
+       }
+ 
