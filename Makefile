@@ -48,6 +48,11 @@ endif
 	echo "Applying genCoords patch for version v1.4.2"
 	- patch -p0 -N -s -i octomap-v1.4.2.genCoords.patch
 
+ifeq ($(USE_CLANG),TRUE)
+	echo "Applying clang++ patch for version v1.4.2"
+	- patch -p0 -N -s -i octomap-v1.4.2.clang.patch
+endif
+
 	# run CMake to generate and configure the build scripts
 	@cd pod-build && cmake -DCMAKE_INSTALL_PREFIX=$(BUILD_PREFIX) \
 		   -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) ../$(CHECKOUT_DIR)/octomap

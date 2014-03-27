@@ -1,0 +1,106 @@
+Index: octomap-v1.4.2/octomap/include/octomap/OcTreeKey.h
+===================================================================
+--- octomap-v1.4.2/octomap/include/octomap/OcTreeKey.h	(revision 447)
++++ octomap-v1.4.2/octomap/include/octomap/OcTreeKey.h	(working copy)
+@@ -41,13 +41,13 @@
+  */
+ 
+ #include <assert.h>
+-#ifdef __GNUC__
+-  #include <tr1/unordered_set>
+-#include <tr1/unordered_map>
+-#else
++//#ifdef __GNUC__
++//  #include <tr1/unordered_set>
++//#include <tr1/unordered_map>
++//#else
+   #include <unordered_set>
+ #include <unordered_map>
+-#endif
++//#endif
+ 
+ namespace octomap {
+ 
+@@ -98,7 +98,8 @@
+    * @note you need to use boost::unordered_set instead if your compiler does not
+    * yet support tr1!
+    */
+-  typedef std::tr1::unordered_set<OcTreeKey, OcTreeKey::KeyHash> KeySet;
++  //typedef std::tr1::unordered_set<OcTreeKey, OcTreeKey::KeyHash> KeySet;
++  typedef std::unordered_set<OcTreeKey, OcTreeKey::KeyHash> KeySet;
+ 
+   /**
+    * Data structrure to efficiently track changed nodes as a combination of
+@@ -105,7 +106,8 @@
+    * OcTreeKeys and a bool flag (to denote newly created nodes)
+    *
+    */
+-  typedef std::tr1::unordered_map<OcTreeKey, bool, OcTreeKey::KeyHash> KeyBoolMap;
++  //typedef std::tr1::unordered_map<OcTreeKey, bool, OcTreeKey::KeyHash> KeyBoolMap;
++  typedef std::unordered_map<OcTreeKey, bool, OcTreeKey::KeyHash> KeyBoolMap;
+ 
+ 
+   class KeyRay {
+Index: octomap-v1.4.2/octomap/include/octomap/OccupancyOcTreeBase.hxx
+===================================================================
+--- octomap-v1.4.2/octomap/include/octomap/OccupancyOcTreeBase.hxx	(revision 447)
++++ octomap-v1.4.2/octomap/include/octomap/OccupancyOcTreeBase.hxx	(working copy)
+@@ -363,12 +363,12 @@
+       if (isNodeOccupied(startingNode)){
+         // Occupied node found at origin 
+         // (need to convert from key, since origin does not need to be a voxel center)
+-        genCoords(current_key, this->tree_depth, end);
++        this->genCoords(current_key, this->tree_depth, end);
+         return true;
+       }
+     } else if(!ignoreUnknown){
+       OCTOMAP_ERROR_STR("Origin node at " << origin << " for raycasting not found, does the node exist?");
+-      genCoords(current_key, this->tree_depth, end);
++      this->genCoords(current_key, this->tree_depth, end);
+       return false;
+     }
+ 
+@@ -435,7 +435,7 @@
+       {
+     	  OCTOMAP_WARNING("Coordinate hit bounds in dim %d, aborting raycast\n", dim);
+     	  // return border point nevertheless:
+-    	  genCoords(current_key, this->tree_depth, end);
++    	  this->genCoords(current_key, this->tree_depth, end);
+     	  return false;
+       }
+ 
+Index: octomap-v1.4.2/octomap/src/Pointcloud.cpp
+===================================================================
+--- octomap-v1.4.2/octomap/src/Pointcloud.cpp	(revision 447)
++++ octomap-v1.4.2/octomap/src/Pointcloud.cpp	(working copy)
+@@ -37,11 +37,12 @@
+  * POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
+-#ifdef _MSC_VER
++#define _MSC_VER
++//#ifdef _MSC_VER
+   #include <algorithm>
+-#else
+-  #include <ext/algorithm>
+-#endif
++//#else
++  //#include <ext/algorithm>
++//#endif
+ #include <fstream>
+ #include <math.h>
+ 
+Index: octomap-v1.4.2/octomap/src/testing/test_iterators.cpp
+===================================================================
+--- octomap-v1.4.2/octomap/src/testing/test_iterators.cpp	(revision 447)
++++ octomap-v1.4.2/octomap/src/testing/test_iterators.cpp	(working copy)
+@@ -322,7 +322,8 @@
+   EXPECT_TRUE(tree->genKey(bbxMin, bbxMinKey));
+   EXPECT_TRUE(tree->genKey(bbxMax, bbxMaxKey));
+ 
+-  typedef std::tr1::unordered_map<OcTreeKey, double, OcTreeKey::KeyHash> KeyVolumeMap;
++  typedef std::unordered_map<OcTreeKey, double, OcTreeKey::KeyHash> KeyVolumeMap;
++  //typedef std::tr1::unordered_map<OcTreeKey, double, OcTreeKey::KeyHash> KeyVolumeMap;
+ 
+   KeyVolumeMap bbxVoxels;
+ 
