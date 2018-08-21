@@ -1,4 +1,5 @@
-REPO := svn://svn.code.sf.net/p/octomap/code/tags/v1.4.2/
+#REPO := svn://svn.code.sf.net/p/octomap/code/tags/v1.4.2/
+REPO := http://svn.code.sf.net/p/octomap/code/tags/v1.4.2/
 # REPO := https://octomap.svn.sourceforge.net/svnroot/octomap/tags/v1.4.2/
 CHECKOUT_DIR := octomap-v1.4.2
 
